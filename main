@@ -10,9 +10,9 @@ def ask_save(fleet):
     choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ").strip().lower()
     if choice == "o":
         save_data(fleet)
-        print("✅ Flotte sauvegardée avec succès.")
+        print("  Flotte sauvegardée avec succès.")
     else:
-        print("❌ Flotte non sauvegardée (aucun changement écrit dans le fichier).")
+        print(" Flotte non sauvegardée (aucun changement écrit dans le fichier).")
 
 
 # --- Chargement au démarrage ---
@@ -26,13 +26,18 @@ def random_event(fleet):
     event = random.choice(["attaque", "renfort"])
     if event == "attaque" and fleet.get_spaceships():
         ship = random.choice(fleet.get_spaceships())
-        ship._Spaceship__condition = "endommagé"
+        ship.set_condition("endommagé")   # utilise setter
         print(f"⚠️ Attaque ennemie ! Le vaisseau {ship.get_name()} est endommagé.")
+        save_data(fleet)  # sauvegarde directe
+        print("État de la flotte sauvegardé après l'attaque.")
     elif event == "renfort" and fleet.get_spaceships():
         ship = random.choice(fleet.get_spaceships())
         new_member = Operator("Renfort", "Inconnu", "homme", 25, "technicien")
         ship.append_member(new_member)
         print(f"🛠️ Renfort ajouté au vaisseau {ship.get_name()}.")
+        save_data(fleet)  # sauvegarde directe
+        print("État de la flotte sauvegardé après le renfort.")
+
 
 # --- Statistiques globales ---
 def global_statistics(fleet):
@@ -80,7 +85,7 @@ def menu():
             case "1":  # Renommer la flotte
                 new_name = input("Nouveau nom de la flotte (ou 'cancel') : ").strip()
                 if new_name.lower() == "cancel":
-                    print("❌ Action annulée.")
+                    print(" Action annulée.")
                     continue
 
                 confirm = input(f"Confirmer le renommage en '{new_name}' ? (o/n) : ").strip().lower()
@@ -89,28 +94,28 @@ def menu():
                     if save_choice == "o":
                         galactica.set_name(new_name)       # changement appliqué uniquement si sauvegarde
                         save_data(galactica)               # écrit dans le fichier
-                        print(f"✅ Flotte renommée et sauvegardée en '{new_name}'.")
+                        print(f"  Flotte renommée et sauvegardée en '{new_name}'.")
                     else:
-                        print("❌ Renommage annulé. Aucun changement en mémoire ni fichier.")
+                        print(" Renommage annulé. Aucun changement en mémoire ni fichier.")
                 else:
-                    print("❌ Renommage annulé.")
+                    print(" Renommage annulé.")
 
 
             case "2":  # Ajouter un vaisseau
                 # -- Saisie du nom du vaisseau ou annulation --
                 name = input("Nom du vaisseau (ou 'cancel') : ").strip()
                 if name.lower() == "cancel":
-                    print("❌ Ajout annulé.")
+                    print(" Ajout annulé.")
                     continue
 
                 # -- Saisie et validation du type --
                 valid_types = ["marchand", "guerre", "transport"]
                 ship_type = input("Type du vaisseau (marchand/guerre/transport ou 'cancel') : ").lower()
                 if ship_type == "cancel":
-                    print("❌ Ajout annulé.")
+                    print(" Ajout annulé.")
                     continue
                 if ship_type not in valid_types:
-                    print("❌ Type invalide. Choisissez parmi :", ", ".join(valid_types))
+                    print(" Type invalide. Choisissez parmi :", ", ".join(valid_types))
                     continue
 
                 # -- Confirmation avant création --
@@ -121,18 +126,18 @@ def menu():
                         ship = Spaceship(name, ship_type)     # création seulement si sauvegarde
                         galactica.append_spaceship(ship)      # ajout en mémoire
                         save_data(galactica)                  # écriture dans le fichier
-                        print(f"✅ Vaisseau '{name}' de type '{ship_type}' ajouté et sauvegardé.")
+                        print(f" Vaisseau '{name}' de type '{ship_type}' ajouté et sauvegardé.")
                     else:
-                        print("❌ Ajout annulé. Aucun changement en mémoire ni fichier.")
+                        print("  Ajout annulé. Aucun changement en mémoire ni fichier.")
                 else:
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
 
 
 
             case "3":  # Supprimer un vaisseau
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
-                    print("❌ Aucun vaisseau dans la flotte.")
+                    print("  Aucun vaisseau dans la flotte.")
                     continue
 
                 # -- Affichage des vaisseaux disponibles --
@@ -141,17 +146,17 @@ def menu():
 
                 idx_input = input("Choisissez un vaisseau à supprimer (ou 'cancel') : ").strip()
                 if idx_input.lower() == "cancel":
-                    print("❌ Suppression annulée.")
+                    print("  Suppression annulée.")
                     continue
 
                 try:
                     idx = int(idx_input) - 1
                 except ValueError:
-                    print("❌ Oups ! Ce n'était pas un numéro.")
+                    print("  Oups ! Ce n'était pas un numéro.")
                     continue
 
                 if idx < 0 or idx >= len(fleet_ships):
-                    print("❌ Numéro invalide.")
+                    print("  Numéro invalide.")
                     continue
 
                 ship = fleet_ships[idx]
@@ -163,11 +168,11 @@ def menu():
                     if save_choice == "o":
                         galactica.get_spaceships().remove(ship)   # suppression seulement si sauvegarde
                         save_data(galactica)                      # écriture dans le fichier
-                        print(f"✅ Vaisseau '{ship.get_name()}' supprimé et sauvegardé.")
+                        print(f"  Vaisseau '{ship.get_name()}' supprimé et sauvegardé.")
                     else:
-                        print("❌ Suppression annulée. Aucun changement en mémoire ni fichier.")
+                        print("  Suppression annulée. Aucun changement en mémoire ni fichier.")
                 else:
-                    print("❌ Suppression annulée.")
+                    print("  Suppression annulée.")
 
 
 
@@ -176,7 +181,7 @@ def menu():
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
-                    print("❌ Aucun vaisseau dans la flotte.")
+                    print("  Aucun vaisseau dans la flotte.")
                     continue
 
                 # -- Affichage des vaisseaux disponibles --
@@ -186,65 +191,65 @@ def menu():
                 # -- Choix du vaisseau --
                 idx_input = input("Choisissez un vaisseau (ou 'cancel') : ").strip()
                 if idx_input.lower() == "cancel":
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
                     continue
                 try:
                     idx = int(idx_input) - 1
                 except ValueError:
-                    print("❌ Oups ! Ce n'était pas un numéro.")
+                    print("  Oups ! Ce n'était pas un numéro.")
                     continue
                 if idx < 0 or idx >= len(fleet_ships):
-                    print("❌ Numéro invalide.")
+                    print("  Numéro invalide.")
                     continue
                 ship = fleet_ships[idx]
 
                 # -- Saisie du rôle avec validation stricte --
                 role = input("Type de membre (operateur/mentaliste ou 'cancel') : ").lower()
                 if role == "cancel":
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
                     continue
                 if role not in ["operateur", "mentaliste"]:
-                    print("❌ Type invalide. Choisissez parmi : operateur, mentaliste.")
+                    print("  Type invalide. Choisissez parmi : operateur, mentaliste.")
                     continue
 
                 # -- Saisie prénom et nom --
                 first = input("Prénom (ou 'cancel') : ").strip()
                 if first.lower() == "cancel":
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
                     continue
                 last = input("Nom (ou 'cancel') : ").strip()
                 if last.lower() == "cancel":
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
                     continue
 
                 # -- Saisie du genre avec validation stricte --
                 gender = input("Genre (femme/homme/autre ou 'cancel') : ").lower()
                 if gender == "cancel":
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
                     continue
                 if gender not in ["femme", "homme", "autre"]:
-                    print("❌ Genre invalide. Choisissez parmi : femme, homme, autre.")
+                    print("  Genre invalide. Choisissez parmi : femme, homme, autre.")
                     continue
 
                 # -- Saisie et validation de l'âge --
                 age_input = input("Âge (ou 'cancel') : ").strip()
                 if age_input.lower() == "cancel":
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
                     continue
                 try:
                     age = int(age_input)
                 except ValueError:
-                    print("❌ Âge invalide.")
+                    print("  Âge invalide.")
                     continue
 
                 # -- Saisie du rôle spécifique si operateur --
                 if role == "operateur":
                     op_role = input("Rôle de l'opérateur (pilote/technicien/commandant ou 'cancel') : ").lower()
                     if op_role == "cancel":
-                        print("❌ Ajout annulé.")
+                        print("  Ajout annulé.")
                         continue
                     if op_role not in ["pilote", "technicien", "commandant"]:
-                        print("❌ Rôle invalide. Choisissez parmi : pilote, technicien, commandant.")
+                        print("  Rôle invalide. Choisissez parmi : pilote, technicien, commandant.")
                         continue
                     member = Operator(first, last, gender, age, op_role)
                 else:
@@ -257,18 +262,18 @@ def menu():
                     if save_choice == "o":
                         ship.append_member(member)   # ajout seulement si sauvegarde
                         save_data(galactica)         # écriture dans le fichier
-                        print(f"✅ Membre {first} {last} ajouté à '{ship.get_name()}' et sauvegardé.")
+                        print(f"  Membre {first} {last} ajouté à '{ship.get_name()}' et sauvegardé.")
                     else:
-                        print("❌ Ajout annulé. Aucun changement en mémoire ni fichier.")
+                        print("  Ajout annulé. Aucun changement en mémoire ni fichier.")
                 else:
-                    print("❌ Ajout annulé.")
+                    print("  Ajout annulé.")
 
 
             case "5":  # Supprimer un membre d'équipage
                 # -- Vérification qu'il y a des vaisseaux --
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:
-                    print("❌ Aucun vaisseau dans la flotte.")
+                    print("  Aucun vaisseau dans la flotte.")
                     continue
 
                 # -- Affichage des vaisseaux disponibles --
@@ -278,28 +283,28 @@ def menu():
                 # -- Choix du vaisseau --
                 idx_input = input("Choisissez un vaisseau (ou 'cancel') : ").strip()
                 if idx_input.lower() == "cancel":
-                    print("❌ Action annulée.")
+                    print("  Action annulée.")
                     continue
                 try:
                     idx = int(idx_input) - 1
                 except ValueError:
-                    print("❌ Oups ! Ce n'était pas un numéro.")
+                    print("  Oups ! Ce n'était pas un numéro.")
                     continue
                 if idx < 0 or idx >= len(fleet_ships):
-                    print("❌ Numéro invalide.")
+                    print("  Numéro invalide.")
                     continue
                 ship = fleet_ships[idx]
 
                 # -- Saisie du nom du membre à supprimer --
                 last_name = input("Nom du membre à supprimer (ou 'cancel') : ").strip()
                 if last_name.lower() == "cancel":
-                    print("❌ Action annulée.")
+                    print("  Action annulée.")
                     continue
 
                 # -- Vérification que le membre existe --
                 crew = ship.get_crew()
                 if not any(m.get_last_name().lower() == last_name.lower() for m in crew):
-                    print(f"❌ Aucun membre nommé '{last_name}' dans le vaisseau {ship.get_name()}.")
+                    print(f"  Aucun membre nommé '{last_name}' dans le vaisseau {ship.get_name()}.")
                     continue
 
                 # -- Confirmation avant suppression --
@@ -309,11 +314,11 @@ def menu():
                     if save_choice == "o":
                         ship.remove_member(last_name)   # suppression seulement si sauvegarde
                         save_data(galactica)            # écriture dans le fichier
-                        print(f"✅ Membre '{last_name}' supprimé de '{ship.get_name()}' et sauvegardé.")
+                        print(f"  Membre '{last_name}' supprimé de '{ship.get_name()}' et sauvegardé.")
                     else:
-                        print("❌ Suppression annulée. Aucun changement en mémoire ni fichier.")
+                        print("  Suppression annulée. Aucun changement en mémoire ni fichier.")
                 else:
-                    print("❌ Suppression annulée.")
+                    print("  Suppression annulée.")
 
 
 
@@ -339,7 +344,7 @@ def menu():
                 try:
                     idx = int(idx_input) - 1
                 except ValueError:
-                    print("😅 Oups ! Ce n'était pas un numéro. Essaie encore.")
+                    print("  Oups ! Ce n'était pas un numéro. Essaie encore.")
                     continue
 
                 if idx < 0 or idx >= len(fleet_ships):
@@ -396,7 +401,7 @@ def menu():
                 try:
                     idx = int(idx_input) - 1
                 except ValueError:
-                    print("😅 Oups ! Ce n'était pas un numéro.")
+                    print("  Oups ! Ce n'était pas un numéro.")
                     continue
 
                 if idx < 0 or idx >= len(fleet_ships):

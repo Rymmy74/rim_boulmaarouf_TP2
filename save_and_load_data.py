@@ -16,7 +16,7 @@ def save_data(fleet, file_name="data.json"):
     json_dict = ast.literal_eval(json_string)
     with open(file_name, "w", encoding="utf-8") as f:
         json.dump(json_dict, f, indent=4)
-    print("✅ Flotte sauvegardée dans", file_name)
+    print("  Flotte sauvegardée dans", file_name)
 
 
 def load_data(file_name="data.json"):
@@ -52,5 +52,5 @@ def load_data(file_name="data.json"):
 
         fleet.append_spaceship(ship)
 
-    print("✅ Flotte chargée depuis", file_name)
+    print("  Flotte chargée depuis", file_name)
     return fleet
