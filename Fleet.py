@@ -19,6 +19,14 @@ class Fleet:
     # --- GETTERS ---
     def get_name(self): return self.__name
     def get_spaceships(self): return self.__spaceships
+    
+    # --- SETTERS ---
+    def set_name(self, new_name):
+     self.__name = new_name
+
+    def set_spaceships(self, new_list):
+     self.__spaceships = new_list
+
 
 """ self.__spaceships → it's the liste of all the spaceships in the fleet.
          ship.get_crew() → get the crew of the spaceship (it's a liste of members).

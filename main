@@ -18,14 +18,14 @@ def random_event(fleet):
     if event == "attaque" and fleet.get_spaceships():
         ship = random.choice(fleet.get_spaceships())
         ship.set_condition("endommagé")   # utilise setter
-        print(f"⚠️ Attaque ennemie ! Le vaisseau {ship.get_name()} est endommagé.")
+        print(f" Attaque ennemie ! Le vaisseau {ship.get_name()} est endommagé.")
         save_data(fleet)  # sauvegarde directe
         print("État de la flotte sauvegardé après l'attaque.")
     elif event == "renfort" and fleet.get_spaceships():
         ship = random.choice(fleet.get_spaceships())
         new_member = Operator("Renfort", "Inconnu", "homme", 25, "technicien")
         ship.append_member(new_member)
-        print(f"🛠️ Renfort ajouté au vaisseau {ship.get_name()}.")
+        print(f" Renfort ajouté au vaisseau {ship.get_name()}.")
         save_data(fleet)  # sauvegarde directe
         print("État de la flotte sauvegardé après le renfort.")
 
@@ -48,7 +48,7 @@ def global_statistics(fleet):
             elif isinstance(m, Mentalist):
                 roles["mentaliste"] += 1
 
-    print(f"📊 Statistiques globales :")
+    print(f" Statistiques globales :")
     print(f"- Nombre total de vaisseaux : {total_ships}")
     print(f"- Membres par rôle : {roles}")
     print(f"- Vaisseaux opérationnels : {operational}, endommagés : {damaged}")
