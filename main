@@ -5,15 +5,6 @@ from Mentalist import Mentalist
 from save_and_load_data import save_data, load_data
 import random
 
-# --- Fonction utilitaire pour proposer la sauvegarde ---
-def ask_save(fleet):
-    choice = input("Voulez-vous sauvegarder la flotte ? (o/n) : ").strip().lower()
-    if choice == "o":
-        save_data(fleet)
-        print("  Flotte sauvegardée avec succès.")
-    else:
-        print(" Flotte non sauvegardée (aucun changement écrit dans le fichier).")
-
 
 # --- Chargement au démarrage ---
 galactica = Fleet("Galactica")
