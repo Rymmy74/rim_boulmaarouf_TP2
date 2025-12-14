@@ -35,10 +35,23 @@ class Spaceship:
                 print(m.introduce_yourself())
 
     def check_preparation(self):
+        reasons = []
+
         has_pilot = any(isinstance(m, Operator) and m.get_role() == "pilote" for m in self.__crew)
+        if not has_pilot:
+            reasons.append("Aucun pilote à bord.")
+
         has_tech = any(isinstance(m, Operator) and m.get_role() == "technicien" for m in self.__crew)
+        if not has_tech:
+            reasons.append("Aucun technicien à bord.")
+
         has_mentalist = any(isinstance(m, Mentalist) and m.get_mana() >= 50 for m in self.__crew)
-        return has_pilot and has_tech and has_mentalist
+        if not has_mentalist:
+            reasons.append("Aucun mentaliste avec au moins 50 de mana.")
+
+        is_ready = len(reasons) == 0
+        return is_ready, reasons
+
 
     # --- GETTERS ---
     def get_name(self): return self.__name
