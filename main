@@ -371,8 +371,6 @@ def menu():
                 print("="*40 + "\n")
 
 
-
-
             case "7":  # Vérifier la préparation d'un vaisseau
                 fleet_ships = galactica.get_spaceships()
                 if not fleet_ships:

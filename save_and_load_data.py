@@ -9,7 +9,7 @@ def save_data(fleet, file_name="data.json"):
     """
     Sauvegarde la flotte en JSON.
     -------------------------------------------------
-    Ici on utilise fleet.__dict__ et les __dict__ des objets
+    on utilise fleet.__dict__ et les __dict__ des objets
     pour capturer tous les attributs privés (ex: "_Spaceship__shipType").
     """
     json_string = json.dumps(fleet.__dict__, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -28,8 +28,8 @@ def load_data(file_name="data.json"):
 
     for ship_data in data.get("_Fleet__spaceships", []):
         ship_name = ship_data.get("_Spaceship__name", "Inconnu")
-        ship_type = ship_data.get("_Spaceship__shipType", "transport")   # default if missing
-        ship_condition = ship_data.get("_Spaceship__condition", 100)     # default if missing
+        ship_type = ship_data.get("_Spaceship__shipType", "transport")   
+        ship_condition = ship_data.get("_Spaceship__condition", 100)     
         ship = Spaceship(ship_name, ship_type, ship_condition)
 
         for member_data in ship_data.get("_Spaceship__crew", []):
